@@ -5,7 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+  <title>얼굴형에 맞는 헤어스타일</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -55,9 +55,6 @@
     <h1 class="title">인공지능 얼굴형 테스트</h1>
     <h2 class="subtitle">내 얼굴에 맞는 머리스타일은 뭘까?</h2>
   </section>
-  <div>Teachable Machine Image Model</div>
-  <button type="button" onclick="init()">Start</button>
-  <button type="button" onclick="predict()">예측</button>
   <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <div class="container file-upload">
     <div class="image-upload-wrap">
@@ -69,6 +66,8 @@
     </div>
     <div class="file-upload-content">
       <img class="file-upload-image" id="face-image" src="#" alt="your image" />
+      <p class="result-message"></p>
+      <div id="label-container"></div>
       <div class="image-title-wrap">
         <button type="button" onclick="removeUpload()" class="remove-image">Remove
           <span class="image-title">Uploaded Image</span>
@@ -77,7 +76,6 @@
     </div>
   </div>
   <div id="webcam-container"></div>
-  <div id="label-container"></div>
   <div id="disqus_thread"></div>
   <script>
 
@@ -128,7 +126,10 @@
         };
 
         reader.readAsDataURL(input.files[0]);
-
+        init().then(()=>{
+          console.log("hello");
+          predict();
+        });
       } else {
         removeUpload();
       }
@@ -180,6 +181,26 @@
       // predict can take in an image, video or canvas html element
       var image = document.getElementById("face-image")
       const prediction = await model.predict(image, false);
+      prediction.sort((a,b) => parseFloat(b.probability) - parseFloat(a.probability));
+      console.log(prediction[0].className);
+      var resultMessege;
+      switch (prediction[0].className) {
+        case "계란형":
+          resultMessege = "계란형"
+          break;
+        case "긴계란형":
+          resultMessege = "긴계란형"
+          break;
+        case "네모난형":
+          resultMessege = "네모난형"
+          break;
+        case "역삼각형":
+          resultMessege = "역삼각형"
+          break;
+        default:
+          resultMessege = "알수없음"
+      }
+      $('.result-message').html(resultMessege);
       for (let i = 0; i < maxPredictions; i++) {
         const classPrediction =
           prediction[i].className + ": " + prediction[i].probability.toFixed(2);
