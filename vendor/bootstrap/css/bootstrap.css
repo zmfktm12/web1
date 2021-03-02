@@ -614,13 +614,13 @@ pre code {
   margin-left: -15px;
 }
 
-.no-gutters {
+.s {
   margin-right: 0;
   margin-left: 0;
 }
 
-.no-gutters > .col,
-.no-gutters > [class*="col-"] {
+.s > .col,
+.s > [class*="col-"] {
   padding-right: 0;
   padding-left: 0;
 }
@@ -8292,7 +8292,7 @@ button.bg-dark:focus {
   padding-left: 0.25rem !important;
 }
 
-.p-2 {
+.bg-dark text-white p-2 {
   padding: 0.5rem !important;
 }
 
